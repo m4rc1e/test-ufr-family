@@ -1,7 +1,5 @@
 sources:
-  - Rubik.glyphs
-  - Rubik-Italic.glyphs
+  - Oswald.glyphs
 axisOrder:
   - wght
-  - ital
-familyName: Rubik
+familyName: Oswald

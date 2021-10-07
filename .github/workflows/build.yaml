@@ -41,7 +41,7 @@ jobs:
           mkdir for-gh-pages
           mv fontbakery-report.md for-gh-pages
           mv fontbakery-report.html for-gh-pages
-          mv fonts/ for-gh-pages
+          mv fonts/ for-gh-pages/built-fonts
           mv badges for-gh-pages
           git fetch --depth=1
           mv proof/* for-gh-pages

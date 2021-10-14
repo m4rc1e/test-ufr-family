@@ -38,16 +38,12 @@ jobs:
       run: make proof
     - name: Rearrange
       run: |
-          mkdir for-gh-pages
-          mv fontbakery-report.md for-gh-pages
-          mv fontbakery-report.html for-gh-pages
-          mv badges for-gh-pages
           git fetch --depth=1
-          mv proof/* for-gh-pages
-          mv fonts/* for-gh-pages/fonts
-          git checkout -f gh-pages
-          cp -ar for-gh-pages/* .
-          rm -rf for-gh-pages
+          git checkout gh-pages
+          # delete every file apart from the index.html file
+          find . ! -name 'index.html' -type f -exec rm -f {} +
+          # pull in files which have been generated from the main branch
+          git checkout main fontbakery-report.md fontbakery-report.html fonts/ proof/ badges/
     - uses: stefanzweifel/git-auto-commit-action@v4
       name: Commit to gh-pages
       with:

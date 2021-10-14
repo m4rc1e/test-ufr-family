@@ -36,24 +36,37 @@ jobs:
       continue-on-error: true
     - name: Generate proofs
       run: make proof
-    - name: Rearrange
+    - name: Make release branch
       run: |
           git fetch --depth=1
-          git checkout gh-pages
-          # delete every file apart from the index.html file
-          find . ! -name 'index.html' -type f -exec rm -f {} +
-          # pull in files which have been generated from the main branch
-          git checkout main fontbakery-report.md fontbakery-report.html fonts/ proof/ badges/
+          # overwrite existing release branch
+          git checkout -B release
+          # delete everything apart from the fonts/ dir
+          find . ! -name 'fonts' -exec rm -f {} +
     - uses: stefanzweifel/git-auto-commit-action@v4
-      name: Commit to gh-pages
+      name: Commit release branch
       with:
-        branch: gh-pages
-        file_pattern: fonts *.html badges
-    - name: Archive artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: Artifacts
-        path: |
-          fonts
-          *.html
-          fontbakery-report.md
+        branch: release
+        file_pattern: fonts
+    
+#    - name: Publish site
+#      run: |
+#        git checkout -f gh-pages
+#        # overwrite the fonts/ dir with the release branch
+#        rm -rf fonts/
+#        git checkout release fonts/
+#    
+#    - uses: stefanzweifel/git-auto-commit-action@v4
+#      name: Commit to gh-pages
+#      with:
+#        branch: gh-pages
+#        file_pattern: fonts *.html badges
+#    - name: Archive artifacts
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: Artifacts
+#        path: |
+#          fonts
+#          *.html
+#          fontbakery-report.md
+#

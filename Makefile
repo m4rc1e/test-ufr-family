@@ -30,7 +30,7 @@ venv/touchfile: requirements.txt
 	touch venv/touchfile
 
 test: venv build.stamp
-	. venv/bin/activate; mkdir -p reports; fontbakery check-googlefonts -l WARN --succinct --badges badges --html reports/fontbakery-report.html --ghmarkdown reports/fontbakery-report.md $(shell find fonts -type f)
+	. venv/bin/activate; mkdir -p out; fontbakery check-googlefonts -l WARN --succinct --badges badges --html out/fontbakery-report.html --ghmarkdown out/fontbakery-report.md $(shell find fonts -type f)
 
 proof: venv build.stamp
 	. venv/bin/activate; mkdir -p test_docs; gftools gen-html proof $(shell find fonts/ttf -type f) -o test_docs/proof; ls test_docs

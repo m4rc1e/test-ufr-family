@@ -34,29 +34,19 @@ jobs:
         file_pattern: .init.stamp README.md
     - name: Build font
       run: make build
-    - name: Generate proofs
-      run: make proof
     - name: Check with fontbakery
       run: make test
       continue-on-error: true
-    - name: Package
-      run: |
-        git fetch --depth=0
-        git add fonts/ reports/ test_docs/*
-        git commit -m 'Generated binary assets'
-        git checkout -f gh-pages
-        rm -rf fonts/ test_docs/
-        git checkout main fonts/ reports/ test_docs/
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      name: Commit to gh-pages
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.ref == 'refs/heads/main' }}
       with:
-        branch: gh-pages
-        file_pattern: fonts/* reports/* test_docs/*
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./out
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:
         name: Artifacts
         path: |
           fonts
-          reports
-          test_docs
+          out

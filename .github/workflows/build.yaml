@@ -45,13 +45,13 @@ jobs:
         git add fonts/ tests/
         git commit -m 'Generated binary assets'
         git checkout -f gh-pages
-        rm -rf fonts/ tests/
-        git checkout main fonts/ tests/
+        rm -rf fonts/ tests/ badges/
+        git checkout main fonts/ tests/ badges/
     - uses: stefanzweifel/git-auto-commit-action@v4
       name: Commit to gh-pages
       with:
         branch: gh-pages
-        file_pattern: fonts tests
+        file_pattern: fonts/* tests/* badges/*
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:

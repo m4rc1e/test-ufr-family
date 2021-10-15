@@ -30,10 +30,10 @@ venv/touchfile: requirements.txt
 	touch venv/touchfile
 
 test: venv build.stamp
-	. venv/bin/activate; mkdir -p out; fontbakery check-googlefonts -l WARN --succinct --badges badges --html out/fontbakery-report.html --ghmarkdown out/fontbakery-report.md $(shell find fonts -type f)
+	. venv/bin/activate; mkdir -p out/ out/fontbakery; fontbakery check-googlefonts -l WARN --succinct --badges badges --html out/fontbakery/fontbakery-report.html --ghmarkdown out/fontbakery/fontbakery-report.md $(shell find fonts -type f)
 
 proof: venv build.stamp
-	. venv/bin/activate; mkdir -p test_docs; gftools gen-html proof $(shell find fonts/ttf -type f) -o test_docs/proof; ls test_docs
+	. venv/bin/activate; mkdir -p out/ out/proof; gftools gen-html proof $(shell find fonts/ttf -type f) -o out/proof
 
 images: venv build.stamp $(DRAWBOT_OUTPUT)
 	git add documentation/*.png && git commit -m "Rebuild images" documentation/*.png

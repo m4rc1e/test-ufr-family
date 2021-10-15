@@ -41,6 +41,7 @@ jobs:
       run: make proof
     - name: Package
       run: |
+        git fetch --depth=1
         git add fonts/ tests/
         git commit -m 'Generated binary assets'
         git checkout -f gh-pages

@@ -42,20 +42,21 @@ jobs:
     - name: Package
       run: |
         git fetch --depth=1
-        git add fonts/ tests/
+        git add fonts/ reports/ test_docs/
         git commit -m 'Generated binary assets'
         git checkout -f gh-pages
         rm -rf fonts/ tests/
-        git checkout main fonts/ tests/
+        git checkout main fonts/ reports/ test_docs/
     - uses: stefanzweifel/git-auto-commit-action@v4
       name: Commit to gh-pages
       with:
         branch: gh-pages
-        file_pattern: fonts/* tests/*
+        file_pattern: fonts/* reports/* test_docs/*
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:
         name: Artifacts
         path: |
           fonts
-          tests
+          reports
+          test_docs

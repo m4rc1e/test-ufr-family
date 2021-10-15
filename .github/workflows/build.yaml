@@ -34,11 +34,11 @@ jobs:
         file_pattern: .init.stamp README.md
     - name: Build font
       run: make build
+    - name: Generate proofs
+      run: make proof
     - name: Check with fontbakery
       run: make test
       continue-on-error: true
-    - name: Generate proofs
-      run: make proof
     - name: Package
       run: |
         git fetch --depth=1

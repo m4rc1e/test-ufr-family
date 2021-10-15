@@ -33,7 +33,7 @@ test: venv build.stamp
 	. venv/bin/activate; mkdir -p reports; fontbakery check-googlefonts -l WARN --succinct --badges badges --html reports/fontbakery-report.html --ghmarkdown reports/fontbakery-report.md $(shell find fonts -type f)
 
 proof: venv build.stamp
-	. venv/bin/activate; mkdir -p test_docs; gftools gen-html proof $(shell find fonts/ttf -type f) -o test_docs/proof
+	. venv/bin/activate; mkdir -p test_docs; gftools gen-html proof $(shell find fonts/ttf -type f) -o test_docs/proof; ls test_docs
 
 images: venv build.stamp $(DRAWBOT_OUTPUT)
 	git add documentation/*.png && git commit -m "Rebuild images" documentation/*.png

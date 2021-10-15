@@ -36,37 +36,22 @@ jobs:
       continue-on-error: true
     - name: Generate proofs
       run: make proof
-    - name: Make release branch
+    - name: Package
       run: |
-          git fetch --depth=1
-          # overwrite existing release branch
-          git checkout -B release
-          # delete everything apart from the fonts/ dir
-          find . ! -name 'fonts' -exec rm -f {} +
+        git add fonts/ tests/
+        git commit -m 'Generated binary assets'
+        git checkout -f gh-pages
+        rm -rf fonts/ tests/
+        git checkout main fonts/ tests/
     - uses: stefanzweifel/git-auto-commit-action@v4
-      name: Commit release branch
+      name: Commit to gh-pages
       with:
-        branch: release
-        file_pattern: fonts
-    
-#    - name: Publish site
-#      run: |
-#        git checkout -f gh-pages
-#        # overwrite the fonts/ dir with the release branch
-#        rm -rf fonts/
-#        git checkout release fonts/
-#    
-#    - uses: stefanzweifel/git-auto-commit-action@v4
-#      name: Commit to gh-pages
-#      with:
-#        branch: gh-pages
-#        file_pattern: fonts *.html badges
-#    - name: Archive artifacts
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: Artifacts
-#        path: |
-#          fonts
-#          *.html
-#          fontbakery-report.md
-#
+        branch: gh-pages
+        file_pattern: fonts tests
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Artifacts
+        path: |
+          fonts
+          tests

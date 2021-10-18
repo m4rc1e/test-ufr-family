@@ -75,14 +75,13 @@ jobs:
         with:
           name: font-assets
           path: assets
-      - name: Show files
-        run: ls -R
-        working-directory: assets
+      - name: Zip files
+        run: zip assets.zip ./assets
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./assets/fonts/ttf/Oswald-Regular.ttf
+          file: ./assets.zip
           asset_name: assets
           tag: ${{ github.ref }}
           overwrite: true

@@ -76,7 +76,7 @@ jobs:
           name: font-assets
           path: assets
       - name: Zip files
-        run: zip assets.zip ./assets
+        run: zip -r assets.zip ./assets
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:

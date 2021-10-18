@@ -1,6 +1,6 @@
 name: Build font and specimen
 
-on: [push]
+on: [push, release]
 
 jobs:
   build:
@@ -11,10 +11,10 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-    - name: Install ttfautohint
+    - name: Install sys tools/deps
       run: |
         sudo apt-get update
-        sudo apt-get install ttfautohint
+        sudo apt-get install ttfautohint yq
     - uses: actions/cache@v2
       with:
         path: ./venv/
@@ -29,6 +29,15 @@ jobs:
       if: github.repository != 'googlefonts/Unified-Font-Repository'
       with:
         file_pattern: .init.stamp README.md
+
+      # Use the release tag in order to bump the fonts
+    - name: Bump release
+      if: github.event_name == 'release'
+      run: |
+        FONTS=$(yq e ".sources[]" sources/config.yaml)
+        echo "Bumping $FONTS $GITHUB_REF"
+      # bumpfontversion $FONTS --new-version 1.111 
+
     - name: Build font
       run: make build
     - name: Check with fontbakery
@@ -53,7 +62,7 @@ jobs:
           out
   release:
     # only run if the commit is tagged...
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'release'
     # ... and it builds successfully
     needs:
       - build
@@ -68,3 +77,12 @@ jobs:
       - name: Show files
         run: ls -R
         working-directory: assets
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: assets
+          asset_name: assets
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "Test lab"

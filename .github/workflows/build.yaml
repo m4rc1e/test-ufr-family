@@ -67,4 +67,4 @@ jobs:
           path: assets
       - name: Show files
         run: ls -R
-        path: assets
+        working-directory: assets

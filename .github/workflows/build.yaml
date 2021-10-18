@@ -47,7 +47,7 @@ jobs:
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Artifacts
+        name: font-assets
         path: |
           fonts
           out
@@ -59,6 +59,12 @@ jobs:
       - build
     runs-on: ubuntu-latest
     steps:
-      - name: make release
-        run: ls .
- 
+      - uses: actions/checkout@v2
+      - name: Download artefact files
+        uses: actions/download-artifact@v2
+        with:
+          name: font-assets
+          path: assets
+      - name: Show files
+        run: ls -R
+        path: assets

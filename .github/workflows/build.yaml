@@ -82,7 +82,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./assets.zip
-          asset_name: assets
+          asset_name: assets.zip
           tag: ${{ github.ref }}
           overwrite: true
           body: "Test lab"

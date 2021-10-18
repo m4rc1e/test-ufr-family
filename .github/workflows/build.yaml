@@ -53,13 +53,12 @@ jobs:
           out
   release:
     # only run if the commit is tagged...
-    if: always()
     if: startsWith(github.ref, 'refs/tags/v')
     # ... and it builds successfully
     needs:
       - build
     runs-on: ubuntu-latest
     steps:
-      run: |
+      - run: |
         ls .
  

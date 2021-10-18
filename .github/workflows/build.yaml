@@ -76,13 +76,13 @@ jobs:
           name: font-assets
           path: assets
       - name: Zip files
-        run: zip -r assets.zip ./assets
+        run: zip -r fonts.zip ./assets/fonts
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./assets.zip
-          asset_name: assets.zip
+          file: ./fonts.zip
+          asset_name: fonts.zip
           tag: ${{ github.ref }}
           overwrite: true
-          body: "Test lab"
+          body: "Production ready fonts"

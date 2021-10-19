@@ -31,9 +31,12 @@ jobs:
       with:
         file_pattern: .init.stamp README.md
     - name: gen zip file name
+      id: zip-name
       shell: bash
       # Set the archive name to repo name + "-assets" e.g "MavenPro-assets"
       run: echo "ZIP_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')-fonts" >> $GITHUB_ENV
+      outputs:
+        zip_name: ${{ env.ZIP_NAME }}
       # If a new release is cut, use the release tag to auto-bump the fonts
     - name: Bump release
       if: github.event_name == 'release'
@@ -65,6 +68,7 @@ jobs:
         path: |
           fonts
           out
+    - name: Output variables
     - outputs:
         zip_name: ${{ env.ZIP_NAME }}
   release:
@@ -75,7 +79,7 @@ jobs:
       - build
     runs-on: ubuntu-latest
     env:
-      ZIP_NAME: ${{ needs.build.outputs.zip_name }}
+      ZIP_NAME: ${{ needs.build.steps.zip-name.outputs.zip_name }}
     steps:
       - uses: actions/checkout@v2
       - name: Download artefact files

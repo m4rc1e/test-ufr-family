@@ -36,7 +36,8 @@ jobs:
       if: github.event_name == 'release'
       run: |
         FONTS=$(yq e ".sources[]" sources/config.yaml)
-        echo "Bumping $FONTS $GITHUB_REF"
+        TAG_NAME=${GITHUB_REF/refs\/tags\//}
+        echo "Bumping $FONTS $TAG_NAME"
       # bumpfontversion $FONTS --new-version 1.111 
 
     - name: Build font
@@ -76,7 +77,7 @@ jobs:
           name: font-assets
           path: assets
       - name: Zip files
-        run: zip -r fonts.zip ./assets/fonts
+        run: zip -r fonts.zip ./assets/fonts/*
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:

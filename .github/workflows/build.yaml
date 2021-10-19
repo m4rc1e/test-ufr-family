@@ -43,7 +43,10 @@ jobs:
         FONTS=$(yq e ".sources[]" sources/config.yaml)
         TAG_NAME=${GITHUB_REF/refs\/tags\//}
         echo "Bumping $FONTS to $TAG_NAME"
-        bumpfontversion $FONTS --new-version $TAG_NAME
+        for font in $FONTS
+        do
+          bumpfontversion sources/$font --new-version $TAG_NAME;
+        done
     - name: Build font
       run: make build
     - name: Check with fontbakery

@@ -30,16 +30,18 @@ jobs:
       if: github.repository != 'googlefonts/Unified-Font-Repository'
       with:
         file_pattern: .init.stamp README.md
-
-      # Use the release tag in order to bump the fonts
+    - name: gen zip file name
+      shell: bash
+      # Set the archive name to repo name + "-assets" e.g "MavenPro-assets"
+      run: echo "ZIP_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')-fonts" >> $GITHUB_ENV
+      # If a new release is cut, use the release tag to auto-bump the fonts
     - name: Bump release
       if: github.event_name == 'release'
       run: |
         FONTS=$(yq e ".sources[]" sources/config.yaml)
         TAG_NAME=${GITHUB_REF/refs\/tags\//}
-        echo "Bumping $FONTS $TAG_NAME"
-      # bumpfontversion $FONTS --new-version 1.111 
-
+        echo "Bumping $FONTS to $TAG_NAME"
+        bumpfontversion $FONTS --new-version $TAG_NAME
     - name: Build font
       run: make build
     - name: Check with fontbakery
@@ -58,7 +60,7 @@ jobs:
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: font-assets
+        name: ${{ env.ZIP_NAME }}
         path: |
           fonts
           out
@@ -71,14 +73,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: gen dir name
-        shell: bash
-        # Set the archive name to repo name + "-fonts" e.g "MavenPro-fonts"
-        run: echo "ZIP_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')-fonts" >> $GITHUB_ENV
       - name: Download artefact files
         uses: actions/download-artifact@v2
         with:
-          name: font-assets
+          name: ${{ env.ZIP_NAME }}
           path: ${{ env.ZIP_NAME }}
       - name: Zip files
         run: zip -r ${{ env.ZIP_NAME }}.zip ${{ env.ZIP_NAME }}

@@ -72,6 +72,8 @@ jobs:
     needs:
       - build
     runs-on: ubuntu-latest
+    env:
+      ZIP_NAME: ${{ jobs.build.env.ZIP_NAME }}
     steps:
       - uses: actions/checkout@v2
       - name: Download artefact files

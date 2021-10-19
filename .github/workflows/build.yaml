@@ -68,9 +68,6 @@ jobs:
         path: |
           fonts
           out
-    - name: Output variables
-    - outputs:
-        zip_name: ${{ env.ZIP_NAME }}
   release:
     # only run if the commit is tagged...
     if: github.event_name == 'release'

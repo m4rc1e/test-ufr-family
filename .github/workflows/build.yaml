@@ -38,6 +38,7 @@ jobs:
     - name: Bump release
       if: github.event_name == 'release'
       run: |
+        . venv/bin/activate
         FONTS=$(yq e ".sources[]" sources/config.yaml)
         TAG_NAME=${GITHUB_REF/refs\/tags\//}
         echo "Bumping $FONTS to $TAG_NAME"

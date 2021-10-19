@@ -65,6 +65,8 @@ jobs:
         path: |
           fonts
           out
+    - outputs:
+        zip_name: ${{ env.ZIP_NAME }}
   release:
     # only run if the commit is tagged...
     if: github.event_name == 'release'
@@ -73,7 +75,7 @@ jobs:
       - build
     runs-on: ubuntu-latest
     env:
-      ZIP_NAME: ${{ jobs.build.env.ZIP_NAME }}
+      ZIP_NAME: ${{ needs.build.outputs.zip_name }}
     steps:
       - uses: actions/checkout@v2
       - name: Download artefact files
